@@ -55,7 +55,7 @@ int makeFileList(LNode *dirlist)
             // Add to list of files, and increment index
             LNode *newN = malloc(sizeof(LNode));
             newN->fname = dir->d_name;
-            dp->next = newN;
+            dp->next = malloc(sizeof(LNode)); 
             dp = newN;
             i += 1;
         }
@@ -74,21 +74,29 @@ int getSHFiles(LNode *fileList, int n, LNode *shList)
 
     // Copy the pointers to avoid overwrite
     LNode *fp = fileList;
+    printf("%p\n",(void*)fp);
     LNode *sp = shList;
 
     // Loop over every item in the file list
     int i;
     for (i = 0; i < n; i++)
     {
+        printf("%s\n","Before printname");
+        printf("%s\n",fp->fname);
+        puts("before string right char");
         // Test if it has the .sh extention
-        char *dot = strrchr(fp->fname, '.');
+        char *dot = strrchr(fp->fname,'.');
+        puts("after strrchar");
         if (dot && !strcmp(dot, ".sh"))
         {
+            puts("before sp fname assign");
             sp->fname = fp->fname;
             t += 1;
-            LNode *newN = malloc(sizeof(LNode));
-            sp->next = newN;
-            sp = newN;
+            puts("before sp->next malloc");
+            sp->next = malloc(sizeof(LNode));
+            puts("after sp->next");
+            sp = sp->next; 
+            puts("after sp");
         }
         fp = fp->next;
     }
@@ -110,17 +118,31 @@ int nw = 6; // Number of words in array
 // Main function
 int main(void)
 {
+    puts("beginning of main");
     // Create vars to hold number of files and .sh files
     int nf = 0;
     int ns = 0;
 
+    files = malloc(sizeof(LNode));
+    shfiles = malloc(sizeof(LNode));
+
+    puts("intialize variables");
+
+
+    printf("%p\n",(void*)files);
     // Populate our lists
     nf = makeFileList(files);
+    puts("after makeFileList");
+    printf("%p\n",(void*)files);
     ns = getSHFiles(files, nf, shfiles);
+
+    puts("populate directory");
 
     // Set up a few things for using makeargv() later
     char delim[] = " \t";
     char **destargv;
+
+    puts("after argv stuff");
 
     // Create a pid_t to store the pid of the child process we are making
     pid_t childpid;
