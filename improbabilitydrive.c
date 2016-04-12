@@ -189,7 +189,7 @@ int main(void)
         {
             // Just run the command
             const char *cmd = cmds[rndCmd];
-            execlp(cmds[rndCmd], cmd);
+            execlp(cmds[rndCmd], cmd, NULL);
         }
     }
     if (childpid != r_wait(NULL))
