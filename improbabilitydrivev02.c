@@ -81,6 +81,8 @@ int getSHFiles(LNode *fileList, int n, LNode *shList)
     int i;
     for (i = 0; i < n; i++)
     {
+        if (fp == NULL)
+            continue;
         printf("%s\n","Before printname");
         printf("%s\n",fp->fname);
         puts("before string right char");
