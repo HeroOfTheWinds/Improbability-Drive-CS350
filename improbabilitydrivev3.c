@@ -81,8 +81,8 @@ char* getFileName(int n)
             // Check if this is the nth file
 			if (i == n)
 			{
-				// Return the current file name
 				char* fname = malloc(sizeof(char)*strlen(dir->d_name));
+				// Return the current file name
 				strcpy(fname, dir->d_name);
 				return fname;
 			}
@@ -91,8 +91,6 @@ char* getFileName(int n)
 		// No need to leave open.
         closedir(d);
     }
-	
-	// If code sees this point, error... Return NULL
 	return NULL;
 }
 
@@ -109,7 +107,7 @@ int isSHFile(char* fname)
 }
 
 // Create a list of command line commands
-char *cmds[12] = {"ls", "grep", "bash", "vi", "ps", "who", "df", "fortune", "history", "date", "top", "cat"};
+char *cmds[11] = {"ls", "grep", "bash", "vi", "ps", "who", "df", "fortune", "date", "top", "cat"};
 
 // Random words to grep
 char *randwords[6] = {"if", "while", "time", "char", "print", "name"};
@@ -142,7 +140,7 @@ int main(void)
     if (childpid == 0)
     {
         // Generate a random number to pick a command
-        int rndCmd = rand() % 12;
+        int rndCmd = rand() % 11;
 
         // Check which command it is to see if an argument is needed
         // 1 is grep, 2 is bash, 3 is vi
@@ -199,6 +197,20 @@ int main(void)
             const char *argFile = fname;
             execlp(cmds[rndCmd], cmd, argFile, NULL);
         }
+		else if (rndCmd == 10)
+		{
+		    puts("Executing cat");
+			// Pick a random file to cat to output
+			int rndF = rand() % nf;
+			
+			// Get file name
+			char* fname = getFileName(rndF);
+			printf("Filename: %s\n", fname);
+            // Execute vi
+            const char *cmd = cmds[rndCmd];
+            const char *argFile = fname;
+            execlp(cmds[rndCmd], cmd, argFile, NULL);
+		}
         else
         {
             // Just run the command
