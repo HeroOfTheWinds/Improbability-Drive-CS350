@@ -78,7 +78,7 @@ char* getFileName(int n)
         // While anything to read remains
         while ((dir = readdir(d)) != NULL)
         {
-            // Check if this is the nth file
+			// Check if this is the nth file
 			if (i == n)
 			{
 				char* fname = malloc(sizeof(char)*strlen(dir->d_name));
@@ -86,11 +86,16 @@ char* getFileName(int n)
 				strcpy(fname, dir->d_name);
 				return fname;
 			}
+			i += 1;
         }
         
 		// No need to leave open.
         closedir(d);
     }
+	else
+	{
+		puts("Error opening directory");
+	}
 	return NULL;
 }
 
@@ -151,8 +156,8 @@ int main(void)
             int rndW = rand() % nw;
             // Execute bash 
             const char *cmd = cmds[rndCmd];
-            const char *argFile = randwords[rndW];
-            execlp(cmds[rndCmd], cmd, argFile, NULL);
+            const char *argWord = randwords[rndW];
+            execlp("bash", "bash", "-c", strcat(strcat("grep ", argWord), "*.*"), NULL);
         }
         else if (rndCmd == 2)
         {
@@ -163,7 +168,7 @@ int main(void)
 			char* fname;
 			
 			// Check if not a SH file, restart search if not
-			while ((fname = getFileName(rndSH)))
+			while (fname = getFileName(rndSH))
 			{
 				if (!isSHFile(fname))
 				{
@@ -191,8 +196,7 @@ int main(void)
 			
 			// Get file name
 			char* fname = getFileName(rndF);
-			printf("Filename: %s\n", fname);
-            // Execute vi
+			// Execute vi
             const char *cmd = cmds[rndCmd];
             const char *argFile = fname;
             execlp(cmds[rndCmd], cmd, argFile, NULL);
@@ -205,8 +209,7 @@ int main(void)
 			
 			// Get file name
 			char* fname = getFileName(rndF);
-			printf("Filename: %s\n", fname);
-            // Execute vi
+			// Execute vi
             const char *cmd = cmds[rndCmd];
             const char *argFile = fname;
             execlp(cmds[rndCmd], cmd, argFile, NULL);
